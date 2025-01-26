@@ -1,0 +1,78 @@
+.home-sidenavbar {
+    display: flex;
+    flex-direction: column;
+    flex: 0.16 1;
+    height: 92vh;
+    overflow-y: auto;
+    position: fixed;
+    top: 55px;
+    left: 0;
+    width: 275px;
+    padding: 14px;
+    background-color: #000;
+    color: #fff;
+}
+
+.home-sidenavbarhide {
+    display: none;
+}
+
+.home-sidenavbar::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+    visibility: hidden;
+}
+
+.home-sidenavbar::-webkit-scrollbar {
+	width: 6px;
+	background-color: #F5F5F5;
+    visibility: hidden;
+}
+
+.home-sidenavbar::-webkit-scrollbar-thumb {
+	background-color: gray;
+    visibility: hidden;
+}
+
+.home-sidenavbar:hover::-webkit-scrollbar-track,
+.home-sidenavbar:hover::-webkit-scrollbar,
+.home-sidenavbar:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+}
+
+.home-sidenavbartop {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgb(86, 85, 85);
+    padding-bottom: 10px;
+}
+
+.home-sidenavbartopoption {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 9px 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    &:hover {
+        background-color: rgb(35, 35, 35);
+    }
+}
+
+.home-sidenavbartopoptiontitle {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.home-sidenavbarmiddle {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgb(86, 85, 85);
+    padding: 10px 0;
+}
+
+.home-sidenavbarimglogo {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}

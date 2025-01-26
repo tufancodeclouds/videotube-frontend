@@ -10,7 +10,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-const Navbar = () => {
+const Navbar = ({ setSideNavBarFunc, sideNavBar }) => {
   const [userImage, setUserImage] = useState(
     "https://w7.pngwing.com/pngs/546/197/png-transparent-anonym-avatar-default-head-person-unknown-user-user-pictures-icon-thumbnail.png"
   );
@@ -50,7 +50,7 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="navbar-left">
-        <div className="navbar-hamburger">
+        <div className="navbar-hamburger" onClick={() => setSideNavBarFunc(!sideNavBar)}>
           <MenuIcon sx={{ color: "#fff" }} />
         </div>
         <div className="navbar-youtubeimg">

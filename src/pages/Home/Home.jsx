@@ -1,9 +1,14 @@
 import React from 'react'
+import SideNavbar from '../../components/SideNavbar/SideNavbar'
+import './Home.css'
 
-const Home = () => {
+const Home = ({ sideNavBar }) => {
   return (
-    <div>Home</div>
+    <div className='home'>
+      <SideNavbar sideNavBar={sideNavBar} />
+
+    </div>
   )
 }
 
-export default Home
+export default Home;
