@@ -14,7 +14,7 @@ import ContentCutIcon from '@mui/icons-material/ContentCut';
 
 const SideNavbar = ({ sideNavBar }) => {
   return (
-    <div className={sideNavBar ? "home-sidenavbar" : "home-sidenavbarhide"}>
+    <div className={`home-sidenavbar ${!sideNavBar ? "home-sidenavbarhide" : ""}`}>
         <div className="home-sidenavbartop">
             <div className="home-sidenavbartopoption">
                 <HomeIcon />
