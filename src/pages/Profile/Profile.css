@@ -1,0 +1,19 @@
+.profile {
+  display: flex;
+  margin-top: 56px;
+  width: 100%;
+  padding: 10px 13px 0 13px;
+}
+
+.profile-main {
+  overflow-x: hidden;
+  flex: 1;
+  margin-left: 272px;
+  min-height: 100vh;
+}
+
+.profile-mainfullwidth {
+  margin-left: 0;
+  transition: margin-left 0.3s ease-in-out;
+}
+

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import YouTubeIcon from "@mui/icons-material/YouTube";
@@ -53,13 +54,13 @@ const Navbar = ({ setSideNavBarFunc, sideNavBar }) => {
         <div className="navbar-hamburger" onClick={() => setSideNavBarFunc(!sideNavBar)}>
           <MenuIcon sx={{ color: "#fff" }} />
         </div>
-        <div className="navbar-youtubeimg">
+        <Link to="/" className="navbar-youtubeimg">
           <YouTubeIcon
             sx={{ fontSize: "34px" }}
             className="navbar-youtubeimage"
           />
           <h1 className="navbar-youtubetitle">YouTube</h1>
-        </div>
+        </Link>
       </div>
 
       <div className="navbar-middle">

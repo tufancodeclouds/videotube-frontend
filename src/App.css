@@ -10,3 +10,13 @@ body {
   font-family: "Roboto", sans-serif;
   overflow-y: hidden;
 }
+
+a {
+  text-decoration-line: none;
+  -moz-text-decoration-line: none;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
