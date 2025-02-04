@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import YouTubeIcon from "@mui/icons-material/YouTube";
@@ -48,6 +48,8 @@ const Navbar = ({ setSideNavBarFunc, sideNavBar }) => {
   }, [navbarModal]);
   /* navbar modal functionality */
 
+  const navigate = useNavigate();
+
   return (
     <div className="navbar">
       <div className="navbar-left">
@@ -81,9 +83,12 @@ const Navbar = ({ setSideNavBarFunc, sideNavBar }) => {
       </div>
 
       <div className="navbar-right">
-        <VideoCallIcon
-          sx={{ color: "#fff", fontSize: "30px", cursor: "pointer" }}
-        />
+        <Link to="/123/upload">
+          <VideoCallIcon
+            sx={{ color: "#fff", fontSize: "30px", cursor: "pointer" }}
+          />
+        </Link>
+        
         <NotificationsIcon
           sx={{ color: "#fff", fontSize: "30px", cursor: "pointer" }}
         />
@@ -97,9 +102,9 @@ const Navbar = ({ setSideNavBarFunc, sideNavBar }) => {
 
         {navbarModal && (
           <div className="navbar-modal" ref={modalRef}>
-            <div className="navbar-modal-option"><PersonIcon sx={{ fontSize: "20px" }} /> Profile</div>
+            <div className="navbar-modal-option" onClick={()=>{navigate("/profile"); setNavbarModal(false)}}><PersonIcon sx={{ fontSize: "20px" }} /> Profile</div>
             <div className="navbar-modal-option"><LogoutIcon sx={{ fontSize: "20px" }} /> Logout</div>
-            <div className="navbar-modal-option"><LoginIcon sx={{ fontSize: "20px" }} /> Login</div>
+            <div className="navbar-modal-option" onClick={()=>{navigate("/login"); setNavbarModal(false)}}><LoginIcon sx={{ fontSize: "20px" }} /> Login</div>
           </div>
         )}
       </div>

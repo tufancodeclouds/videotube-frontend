@@ -6,14 +6,137 @@
 }
 
 .profile-main {
-  overflow-x: hidden;
   flex: 1;
   margin-left: 272px;
-  min-height: 100vh;
+  height: calc(100vh - 67px);
+  overflow-y: auto;
+}
+
+.profile-main::-webkit-scrollbar {
+  width: 6px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  visibility: hidden;
+}
+
+.profile-main::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: 8px;
+  visibility: hidden;
+}
+
+.profile-main:hover::-webkit-scrollbar,
+.profile-main:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
 }
 
 .profile-mainfullwidth {
   margin-left: 0;
   transition: margin-left 0.3s ease-in-out;
+}
+
+.profile-main-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 0 20px 0;
+}
+
+.profile-main-top-left {
+  width: 140px;
+}
+
+.profile-main-top-left-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile-about-title {
+  font-size: 26px;
+  font-weight: 600;
+  color: rgb(42, 42, 42);
+  margin-bottom: 5px;
+}
+
+.profile-about-first-para,
+.profile-about-second-para {
+  font-size: 15px;
+  color: rgb(153, 153, 153);
+}
+
+.profile-about-first-para {
+  margin-bottom: 7px;
+}
+
+.profile-about-first-para .dot {
+  position: relative;
+  top: -4px;
+}
+
+.profile-videos-title {
+  font-size: 20px;
+  padding-bottom: 10px;
+  color: rgb(42, 42, 42);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgb(207, 207, 207);
+}
+
+.profile-videos-title svg {
+  width: 0.8em;
+  height: 0.8em;
+  position: relative;
+  top: 1px;
+}
+
+.profile-videos {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.profile-video {
+  width: calc(25% - 8px);
+  height: 190px;
+  margin-bottom: 22px;
+  cursor: pointer;
+}
+
+.profile-mainfullwidth .profile-video {
+  width: calc(20% - 8px);
+}
+
+.profile-video-thumbnail {
+  width: 100%;
+  height: 140px;
+  border-radius: 10px;
+}
+
+.profile-video-thumbnail-img {
+  width: inherit;
+  height: inherit;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.profile-video-details {
+  padding-top: 10px;
+}
+
+.profile-video-title {
+  color: rgb(42, 42, 42);
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.profile-video-about {
+  color: #ababab;
+  font-size: 13px;
 }
 

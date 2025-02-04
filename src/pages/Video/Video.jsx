@@ -2,6 +2,7 @@ import React from "react";
 import "./Video.css";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
+import { Link } from "react-router-dom";
 
 const Video = () => {
   return (
@@ -28,13 +29,13 @@ const Video = () => {
 
           <div className="video-profile">
             <div className="video-profile-left">
-              <div className="video-profile-img-wrapper">
+              <Link to="/user/123" className="video-profile-img-wrapper">
                 <img
                   src="https://w7.pngwing.com/pngs/546/197/png-transparent-anonym-avatar-default-head-person-unknown-user-user-pictures-icon-thumbnail.png"
                   alt="profile"
                   className="video-profile-img"
                 />
-              </div>
+              </Link>
 
               <div className="video-profile-subview">
                 <p className="video-profile-name">User Name</p>

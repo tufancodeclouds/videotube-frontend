@@ -5,6 +5,7 @@ import Navbar from './components/Navbar/Navbar'
 import Home from './pages/Home/Home'
 import Video from './pages/Video/Video'
 import Profile from './pages/Profile/Profile'
+import VideoUpload from './pages/VideoUpload/VideoUpload'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/" element={<Home sideNavBar={sideNavBar} />} />
         <Route path="/watch/:id" element={<Video />} />
         <Route path="/user/:id" element={<Profile sideNavBar={sideNavBar} />} />
+        <Route path="/:id/upload" element={<VideoUpload />} />
       </Routes>
     </>
   )
