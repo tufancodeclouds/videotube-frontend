@@ -164,3 +164,32 @@
   color: #0d6efd;
 }
 
+.signup .error-message {
+  font-size: 14px;
+  margin-top: 20px;
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+  padding: 15px 20px;
+  border: 1px solid #f5c2c7;
+  border-radius: 4px;
+}
+
+.signup .rotate {
+  margin-left: 2px;
+  -webkit-animation: rotate 2s infinite linear;
+  animation: rotate 2s infinite linear;
+}
+
+@keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+

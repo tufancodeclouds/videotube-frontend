@@ -1,23 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Signup.css";
 import { useFormik } from "formik";
 import { validationSchema } from "../../validations/validationSchema";
 import axios from "axios";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 
 const Signup = ({ setSignup, setLogin }) => {
+  const [errorMessage, setErrorMessage] = useState("");
+
   const formik = useFormik({
     initialValues: {
       fullname: "",
       email: "",
       username: "",
       password: "",
-      avatar: null, // Required
-      coverImage: null, // Optional
+      avatar: null,
+      coverImage: null,
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
+      setErrorMessage("");
       const formData = new FormData();
       formData.append("fullname", values.fullname);
       formData.append("email", values.email);
@@ -36,7 +40,10 @@ const Signup = ({ setSignup, setLogin }) => {
         console.log("User registered successfully:", response.data);
         setSignup(false);
       } catch (error) {
-        console.error("Registration failed:", error.response?.data || error);
+        const errorMsg =
+          error.response?.data?.message ||
+          "Registration failed. Please try again.";
+        setErrorMessage(errorMsg);
       }
       setSubmitting(false);
     },
@@ -50,6 +57,8 @@ const Signup = ({ setSignup, setLogin }) => {
           <h2 className="signup-card-title-text">Signup</h2>
         </div>
 
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+
         <form className="signup-form" onSubmit={formik.handleSubmit}>
           <input
             type="text"
@@ -60,9 +69,9 @@ const Signup = ({ setSignup, setLogin }) => {
             onBlur={formik.handleBlur}
             value={formik.values.fullname}
           />
-          {formik.touched.fullname && formik.errors.fullname ? (
+          {formik.touched.fullname && formik.errors.fullname && (
             <p className="validation-error-text">{formik.errors.fullname}</p>
-          ) : null}
+          )}
 
           <input
             type="email"
@@ -73,9 +82,9 @@ const Signup = ({ setSignup, setLogin }) => {
             onBlur={formik.handleBlur}
             value={formik.values.email}
           />
-          {formik.touched.email && formik.errors.email ? (
+          {formik.touched.email && formik.errors.email && (
             <p className="validation-error-text">{formik.errors.email}</p>
-          ) : null}
+          )}
 
           <input
             type="text"
@@ -86,9 +95,9 @@ const Signup = ({ setSignup, setLogin }) => {
             onBlur={formik.handleBlur}
             value={formik.values.username}
           />
-          {formik.touched.username && formik.errors.username ? (
+          {formik.touched.username && formik.errors.username && (
             <p className="validation-error-text">{formik.errors.username}</p>
-          ) : null}
+          )}
 
           <input
             type="password"
@@ -99,9 +108,9 @@ const Signup = ({ setSignup, setLogin }) => {
             onBlur={formik.handleBlur}
             value={formik.values.password}
           />
-          {formik.touched.password && formik.errors.password ? (
+          {formik.touched.password && formik.errors.password && (
             <p className="validation-error-text">{formik.errors.password}</p>
-          ) : null}
+          )}
 
           <div className="upload-sec">
             <div className="upload-sec-show">
@@ -167,7 +176,11 @@ const Signup = ({ setSignup, setLogin }) => {
               className="signup-btn"
               disabled={formik.isSubmitting}
             >
-              {formik.isSubmitting ? "Signing up..." : "Signup"}
+              {formik.isSubmitting ? (
+                <>
+                  Signup <AutorenewRoundedIcon className="rotate" />
+                </>
+              ) : "Signup"}
             </button>
             <div
               className="login-btn"

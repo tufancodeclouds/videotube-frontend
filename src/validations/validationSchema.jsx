@@ -1,43 +1,49 @@
 import * as Yup from "yup";
 
 export const validationSchema = Yup.object({
+  // Fullname validation
   fullname: Yup.string()
-    .min(3, "Fullname must be at least 3 characters long.")
-    .required("Fullname is required."),
+    .trim()
+    .min(3, "Fullname must be at least 3 characters long")
+    .required("Fullname is required"),
+
+  // Email validation
   email: Yup.string()
-    .email("Please enter a valid email address.")
-    .required("Email is required."),
+    .trim()
+    .email("Invalid email format")
+    .required("Email is required"),
+
+  // Username validation
   username: Yup.string()
-    .min(3, "Username must be at least 3 characters long.")
-    .max(15, "Username must not exceed 15 characters.")
-    .matches(
-      /^[a-zA-Z0-9_]+$/,
-      "Username can only contain letters, numbers, and underscores."
-    )
-    .required("Username is required."),
+    .trim()
+    .min(3, "Username must be at least 3 characters long")
+    .required("Username is required"),
+
+  // Password validation
   password: Yup.string()
-    .min(6, "Password must be at least 6 characters long.")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter.")
-    .matches(/[a-z]/, "Password must contain at least one lowercase letter.")
-    .matches(/[0-9]/, "Password must contain at least one number.")
+    .trim()
     .matches(
-      /[!@#$%^&*(),.?":{}|<>]/,
-      "Password must contain at least one special character."
+      /^(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+      "Password must contain at least one uppercase letter, one lowercase letter, one digit or special character, and be at least 8 characters long"
     )
-    .required("Password is required."),
+    .required("Password is required"),
+
+  // Avatar validation (required)
   avatar: Yup.mixed()
-    .required("Avatar is required.") // Avatar is required
+    .required("Avatar file is required")
     .test("fileSize", "File size should be less than 2MB", (value) => {
       return value && value.size <= 2 * 1024 * 1024; // 2MB limit
     })
     .test("fileType", "Only JPG or PNG files are allowed", (value) => {
       return value && ["image/jpeg", "image/png"].includes(value.type);
     }),
+
+  // Cover Image validation (optional)
   coverImage: Yup.mixed()
-    .nullable() // Allow null values
-    .notRequired() // Make it optional
+    .nullable()
+    .notRequired()
     .test("fileSize", "File size should be less than 5MB", (value) => {
-      return !value || (value && value.size <= 5 * 1024 * 1024); // Cover Image is optional
+      return !value || (value && value.size <= 5 * 1024 * 1024);
     })
     .test("fileType", "Only JPG or PNG files are allowed", (value) => {
       return (
