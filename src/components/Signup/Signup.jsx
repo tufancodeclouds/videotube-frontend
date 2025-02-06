@@ -2,6 +2,7 @@ import React from "react";
 import "./Signup.css";
 import { useFormik } from "formik";
 import { validationSchema } from "../../validations/validationSchema";
+import axios from "axios";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 
@@ -12,10 +13,32 @@ const Signup = ({ setSignup, setLogin }) => {
       email: "",
       username: "",
       password: "",
+      avatar: null, // Required
+      coverImage: null, // Optional
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values, { setSubmitting }) => {
+      const formData = new FormData();
+      formData.append("fullname", values.fullname);
+      formData.append("email", values.email);
+      formData.append("username", values.username);
+      formData.append("password", values.password);
+      if (values.avatar) formData.append("avatar", values.avatar);
+      if (values.coverImage) formData.append("coverImage", values.coverImage);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/api/v1/users/register",
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+
+        console.log("User registered successfully:", response.data);
+        setSignup(false);
+      } catch (error) {
+        console.error("Registration failed:", error.response?.data || error);
+      }
+      setSubmitting(false);
     },
   });
 
@@ -38,7 +61,7 @@ const Signup = ({ setSignup, setLogin }) => {
             value={formik.values.fullname}
           />
           {formik.touched.fullname && formik.errors.fullname ? (
-            <p className="validation-text">{formik.errors.fullname}</p>
+            <p className="validation-error-text">{formik.errors.fullname}</p>
           ) : null}
 
           <input
@@ -51,7 +74,7 @@ const Signup = ({ setSignup, setLogin }) => {
             value={formik.values.email}
           />
           {formik.touched.email && formik.errors.email ? (
-            <p className="validation-text">{formik.errors.email}</p>
+            <p className="validation-error-text">{formik.errors.email}</p>
           ) : null}
 
           <input
@@ -64,7 +87,7 @@ const Signup = ({ setSignup, setLogin }) => {
             value={formik.values.username}
           />
           {formik.touched.username && formik.errors.username ? (
-            <p className="validation-text">{formik.errors.username}</p>
+            <p className="validation-error-text">{formik.errors.username}</p>
           ) : null}
 
           <input
@@ -77,7 +100,7 @@ const Signup = ({ setSignup, setLogin }) => {
             value={formik.values.password}
           />
           {formik.touched.password && formik.errors.password ? (
-            <p className="validation-text">{formik.errors.password}</p>
+            <p className="validation-error-text">{formik.errors.password}</p>
           ) : null}
 
           <div className="upload-sec">
@@ -88,9 +111,28 @@ const Signup = ({ setSignup, setLogin }) => {
                   sx={{ fontSize: "28px" }}
                   className="upload-sec-show-icon"
                 />
-                <input type="file" className="upload-form-file" />
+                <input
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  className="upload-form-file"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    formik.setFieldValue("avatar", file);
+                  }}
+                />
               </div>
             </div>
+            {formik.touched.avatar && formik.errors.avatar ? (
+              <p className="validation-error-text validation-error-upload">
+                {formik.errors.avatar}
+              </p>
+            ) : (
+              formik.values.avatar && (
+                <p className="validation-success-text">
+                  Selected file: <span>{formik.values.avatar.name}</span>
+                </p>
+              )
+            )}
           </div>
 
           <div className="upload-sec">
@@ -101,14 +143,31 @@ const Signup = ({ setSignup, setLogin }) => {
                   sx={{ fontSize: "28px" }}
                   className="upload-sec-show-icon"
                 />
-                <input type="file" className="upload-form-file" />
+                <input
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  className="upload-form-file"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    formik.setFieldValue("coverImage", file);
+                  }}
+                />
               </div>
             </div>
+            {formik.values.coverImage && (
+              <p className="validation-success-text">
+                Selected file: <span>{formik.values.coverImage.name}</span>
+              </p>
+            )}
           </div>
 
           <div className="login-signup-cancel-btns">
-            <button type="submit" className="signup-btn">
-              Signup
+            <button
+              type="submit"
+              className="signup-btn"
+              disabled={formik.isSubmitting}
+            >
+              {formik.isSubmitting ? "Signing up..." : "Signup"}
             </button>
             <div
               className="login-btn"

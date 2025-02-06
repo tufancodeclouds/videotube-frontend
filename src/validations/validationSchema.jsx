@@ -25,4 +25,23 @@ export const validationSchema = Yup.object({
       "Password must contain at least one special character."
     )
     .required("Password is required."),
+  avatar: Yup.mixed()
+    .required("Avatar is required.") // Avatar is required
+    .test("fileSize", "File size should be less than 2MB", (value) => {
+      return value && value.size <= 2 * 1024 * 1024; // 2MB limit
+    })
+    .test("fileType", "Only JPG or PNG files are allowed", (value) => {
+      return value && ["image/jpeg", "image/png"].includes(value.type);
+    }),
+  coverImage: Yup.mixed()
+    .nullable() // Allow null values
+    .notRequired() // Make it optional
+    .test("fileSize", "File size should be less than 5MB", (value) => {
+      return !value || (value && value.size <= 5 * 1024 * 1024); // Cover Image is optional
+    })
+    .test("fileType", "Only JPG or PNG files are allowed", (value) => {
+      return (
+        !value || (value && ["image/jpeg", "image/png"].includes(value.type))
+      );
+    }),
 });
