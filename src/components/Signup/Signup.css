@@ -175,6 +175,16 @@
   border-radius: 4px;
 }
 
+.signup .success-message {
+  font-size: 14px;
+  margin-top: 20px;
+  color: #0f5132;
+  background-color: #d1e7dd;
+  padding: 15px 20px;
+  border: 1px solid #badbcc;
+  border-radius: 4px;
+}
+
 .signup .rotate {
   margin-left: 2px;
   -webkit-animation: rotate 2s infinite linear;

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import "./Signup.css";
 import { useFormik } from "formik";
-import { validationSchema } from "../../validations/validationSchema";
+import { signupValidationSchema } from "../../validations/signupValidationSchema";
 import axios from "axios";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
+import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
 
 const Signup = ({ setSignup, setLogin }) => {
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const formik = useFormik({
     initialValues: {
@@ -19,9 +20,11 @@ const Signup = ({ setSignup, setLogin }) => {
       avatar: null,
       coverImage: null,
     },
-    validationSchema: validationSchema,
+    validationSchema: signupValidationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       setErrorMessage("");
+      setSuccessMessage("");
+
       const formData = new FormData();
       formData.append("fullname", values.fullname);
       formData.append("email", values.email);
@@ -38,7 +41,14 @@ const Signup = ({ setSignup, setLogin }) => {
         );
 
         console.log("User registered successfully:", response.data);
-        setSignup(false);
+
+        // Display success message from backend
+        setSuccessMessage(response.data.message);
+
+        setTimeout(() => {
+          setSignup(false);
+        }, 5000);
+
       } catch (error) {
         const errorMsg =
           error.response?.data?.message ||
@@ -58,6 +68,7 @@ const Signup = ({ setSignup, setLogin }) => {
         </div>
 
         {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {successMessage && <p className="success-message">{successMessage}</p>}
 
         <form className="signup-form" onSubmit={formik.handleSubmit}>
           <input
@@ -180,7 +191,9 @@ const Signup = ({ setSignup, setLogin }) => {
                 <>
                   Signup <AutorenewRoundedIcon className="rotate" />
                 </>
-              ) : "Signup"}
+              ) : (
+                "Signup"
+              )}
             </button>
             <div
               className="login-btn"

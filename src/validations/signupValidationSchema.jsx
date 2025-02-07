@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const validationSchema = Yup.object({
+export const signupValidationSchema = Yup.object({
   // Fullname validation
   fullname: Yup.string()
     .trim()
