@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import "./Login.css";
 import { useFormik } from "formik";
-import { loginValidationSchema } from "../../validations/loginValidationSchema";
-import axios from "axios";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
-import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import { toast } from "react-toastify";
+import { loginValidationSchema } from "../../validations/loginValidationSchema";
+import authApi from "../../api/authApi";
+import "./Login.css";
 
 const Login = ({ setLogin, setSignup }) => {
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -16,40 +18,29 @@ const Login = ({ setLogin, setSignup }) => {
       password: "",
     },
     validationSchema: loginValidationSchema,
-    onSubmit: async (values, { setSubmitting }) => {
-      setErrorMessage("");
-      setSuccessMessage("");
-      
-      const formData = new FormData();
-      formData.append("username", values.username);
-      formData.append("password", values.password);
-
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
-        const response = await axios.post(
-          "http://localhost:8000/api/v1/users/login",
-          formData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await authApi.post("/users/login", values);
 
-        console.log("User logged in successfully:", response.data);
+        console.log(response);
 
-        // Display success message from backend
-        setSuccessMessage(response.data.message);
+        localStorage.setItem("accessToken", response.data.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.data.refreshToken);
+        localStorage.setItem("avatar", response.data.data.user.avatar);
 
-        setTimeout(() => {
-          setLogin(false);
-        }, 5000);
+        toast.success(response.data.message);
 
+        resetForm();
+
+        setLogin(false);
+        
       } catch (error) {
-        const errorMsg =
-          error.response?.data?.message || "Login failed. Please try again.";
-        setErrorMessage(errorMsg);
+        toast.error(
+          error.response?.data?.message || "Login failed. Please try again."
+        );
+      } finally {
+        setSubmitting(false);
       }
-      setSubmitting(false);
     },
   });
 
@@ -60,9 +51,6 @@ const Login = ({ setLogin, setSignup }) => {
           <LoginOutlinedIcon sx={{ fontSize: "36px" }} />
           <h2 className="login-card-title-text">Login</h2>
         </div>
-
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-        {successMessage && <p className="success-message">{successMessage}</p>}
 
         <form className="login-form" onSubmit={formik.handleSubmit}>
           <input
@@ -78,15 +66,23 @@ const Login = ({ setLogin, setSignup }) => {
             <p className="validation-error-text">{formik.errors.username}</p>
           )}
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="login-form-input"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
+          <div className="password-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              className="login-form-input password-input"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            <span
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+            </span>
+          </div>
           {formik.touched.password && formik.errors.password && (
             <p className="validation-error-text">{formik.errors.password}</p>
           )}
@@ -99,7 +95,7 @@ const Login = ({ setLogin, setSignup }) => {
             >
               {formik.isSubmitting ? (
                 <>
-                  Login <AutorenewRoundedIcon className="rotate" />
+                  Login <AutorenewIcon className="rotate" />
                 </>
               ) : (
                 "Login"

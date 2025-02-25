@@ -203,3 +203,21 @@
   }
 }
 
+.signup .password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.signup .password-input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.signup .password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 48%;
+  cursor: pointer;
+  color: #666;
+}
+

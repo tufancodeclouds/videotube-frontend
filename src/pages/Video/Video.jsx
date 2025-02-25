@@ -147,7 +147,7 @@ const Video = () => {
             </p>
             <p className="video-suggestion-channel-name">Channel Name</p>
             <p className="video-suggestion-stats">
-              1M views <span class="dot">.</span> 1 month ago
+              1M views <span className="dot">.</span> 1 month ago
             </p>
           </div>
         </div>
@@ -168,7 +168,7 @@ const Video = () => {
             </p>
             <p className="video-suggestion-channel-name">Channel Name</p>
             <p className="video-suggestion-stats">
-              1M views <span class="dot">.</span> 1 month ago
+              1M views <span className="dot">.</span> 1 month ago
             </p>
           </div>
         </div>
@@ -189,7 +189,7 @@ const Video = () => {
             </p>
             <p className="video-suggestion-channel-name">Channel Name</p>
             <p className="video-suggestion-stats">
-              1M views <span class="dot">.</span> 1 month ago
+              1M views <span className="dot">.</span> 1 month ago
             </p>
           </div>
         </div>
@@ -210,7 +210,7 @@ const Video = () => {
             </p>
             <p className="video-suggestion-channel-name">Channel Name</p>
             <p className="video-suggestion-stats">
-              1M views <span class="dot">.</span> 1 month ago
+              1M views <span className="dot">.</span> 1 month ago
             </p>
           </div>
         </div>
@@ -231,7 +231,7 @@ const Video = () => {
             </p>
             <p className="video-suggestion-channel-name">Channel Name</p>
             <p className="video-suggestion-stats">
-              1M views <span class="dot">.</span> 1 month ago
+              1M views <span className="dot">.</span> 1 month ago
             </p>
           </div>
         </div>
@@ -252,7 +252,7 @@ const Video = () => {
             </p>
             <p className="video-suggestion-channel-name">Channel Name</p>
             <p className="video-suggestion-stats">
-              1M views <span class="dot">.</span> 1 month ago
+              1M views <span className="dot">.</span> 1 month ago
             </p>
           </div>
         </div>
@@ -273,7 +273,7 @@ const Video = () => {
             </p>
             <p className="video-suggestion-channel-name">Channel Name</p>
             <p className="video-suggestion-stats">
-              1M views <span class="dot">.</span> 1 month ago
+              1M views <span className="dot">.</span> 1 month ago
             </p>
           </div>
         </div>
@@ -294,7 +294,7 @@ const Video = () => {
             </p>
             <p className="video-suggestion-channel-name">Channel Name</p>
             <p className="video-suggestion-stats">
-              1M views <span class="dot">.</span> 1 month ago
+              1M views <span className="dot">.</span> 1 month ago
             </p>
           </div>
         </div>
@@ -315,7 +315,7 @@ const Video = () => {
             </p>
             <p className="video-suggestion-channel-name">Channel Name</p>
             <p className="video-suggestion-stats">
-              1M views <span class="dot">.</span> 1 month ago
+              1M views <span className="dot">.</span> 1 month ago
             </p>
           </div>
         </div>

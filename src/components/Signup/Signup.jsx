@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import "./Signup.css";
 import { useFormik } from "formik";
-import { signupValidationSchema } from "../../validations/signupValidationSchema";
-import axios from "axios";
+import { toast } from "react-toastify";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import { signupValidationSchema } from "../../validations/signupValidationSchema";
+import authApi from "../../api/authApi";
+import "./Signup.css";
 
 const Signup = ({ setSignup, setLogin }) => {
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -21,41 +23,33 @@ const Signup = ({ setSignup, setLogin }) => {
       coverImage: null,
     },
     validationSchema: signupValidationSchema,
-    onSubmit: async (values, { setSubmitting }) => {
-      setErrorMessage("");
-      setSuccessMessage("");
-
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
       const formData = new FormData();
       formData.append("fullname", values.fullname);
       formData.append("email", values.email);
       formData.append("username", values.username);
       formData.append("password", values.password);
-      if (values.avatar) formData.append("avatar", values.avatar);
-      if (values.coverImage) formData.append("coverImage", values.coverImage);
+      formData.append("avatar", values.avatar);
+      formData.append("coverImage", values.coverImage ? values.coverImage : null);
 
       try {
-        const response = await axios.post(
-          "http://localhost:8000/api/v1/users/register",
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
+        const response = await authApi.post("/users/register", formData);
 
-        console.log("User registered successfully:", response.data);
+        console.log(response);
 
-        // Display success message from backend
-        setSuccessMessage(response.data.message);
+        toast.success(response.data.message);
 
-        setTimeout(() => {
-          setSignup(false);
-        }, 5000);
+        resetForm();
+
+        setSignup(false);
 
       } catch (error) {
-        const errorMsg =
-          error.response?.data?.message ||
-          "Registration failed. Please try again.";
-        setErrorMessage(errorMsg);
+        toast.error(
+          error.response?.data?.message || "Signup failed. Please try again."
+        );
+      } finally {
+        setSubmitting(false);
       }
-      setSubmitting(false);
     },
   });
 
@@ -66,9 +60,6 @@ const Signup = ({ setSignup, setLogin }) => {
           <LoginOutlinedIcon sx={{ fontSize: "36px" }} />
           <h2 className="signup-card-title-text">Signup</h2>
         </div>
-
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-        {successMessage && <p className="success-message">{successMessage}</p>}
 
         <form className="signup-form" onSubmit={formik.handleSubmit}>
           <input
@@ -110,19 +101,27 @@ const Signup = ({ setSignup, setLogin }) => {
             <p className="validation-error-text">{formik.errors.username}</p>
           )}
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="signup-form-input"
-            name="password"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.password}
-          />
+          <div className="password-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              className="signup-form-input"
+              name="password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
+            />
+            <span
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+            </span>
+          </div>
           {formik.touched.password && formik.errors.password && (
             <p className="validation-error-text">{formik.errors.password}</p>
           )}
-
+          
           <div className="upload-sec">
             <div className="upload-sec-show">
               <p className="upload-sec-show-text">Avatar</p>

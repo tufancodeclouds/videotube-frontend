@@ -1,31 +1,37 @@
-import { useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import './App.css'
-import Navbar from './components/Navbar/Navbar'
-import Home from './pages/Home/Home'
-import Video from './pages/Video/Video'
-import Profile from './pages/Profile/Profile'
-import VideoUpload from './pages/VideoUpload/VideoUpload'
+import { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+import Navbar from "./components/Navbar/Navbar";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-
   const [sideNavBar, setSideNavBar] = useState(true);
 
   const setSideNavBarFunc = (value) => {
-    setSideNavBar(value)
-  }
+    setSideNavBar(value);
+  };
 
   return (
     <>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
       <Navbar setSideNavBarFunc={setSideNavBarFunc} sideNavBar={sideNavBar} />
-      <Routes>
-        <Route path="/" element={<Home sideNavBar={sideNavBar} />} />
-        <Route path="/watch/:id" element={<Video />} />
-        <Route path="/user/:id" element={<Profile sideNavBar={sideNavBar} />} />
-        <Route path="/:id/upload" element={<VideoUpload />} />
-      </Routes>
+
+      <AppRoutes sideNavBar={sideNavBar} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
