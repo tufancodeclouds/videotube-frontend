@@ -6,11 +6,12 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { toast } from "react-toastify";
 import { loginValidationSchema } from "../../validations/loginValidationSchema";
-import authApi from "../../api/authApi";
+import useApiCall from "../../hooks/useApiCall";
 import "./Login.css";
 
 const Login = ({ setLogin, setSignup }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const { apiCall, isLoading } = useApiCall();
 
   const formik = useFormik({
     initialValues: {
@@ -18,29 +19,20 @@ const Login = ({ setLogin, setSignup }) => {
       password: "",
     },
     validationSchema: loginValidationSchema,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       try {
-        const response = await authApi.post("/users/login", values);
+        const response = await apiCall("/users/login", "POST", values);
 
-        console.log(response);
+        // Store tokens and user avatar in localStorage
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+        localStorage.setItem("avatar", response.data.user.avatar);
 
-        localStorage.setItem("accessToken", response.data.data.accessToken);
-        localStorage.setItem("refreshToken", response.data.data.refreshToken);
-        localStorage.setItem("avatar", response.data.data.user.avatar);
-
-        toast.success(response.data.message);
+        // toast.success(response.message);
 
         resetForm();
-
         setLogin(false);
-        
-      } catch (error) {
-        toast.error(
-          error.response?.data?.message || "Login failed. Please try again."
-        );
-      } finally {
-        setSubmitting(false);
-      }
+      } catch (error) {}
     },
   });
 
@@ -53,6 +45,7 @@ const Login = ({ setLogin, setSignup }) => {
         </div>
 
         <form className="login-form" onSubmit={formik.handleSubmit}>
+          {/* Username Input */}
           <input
             type="text"
             name="username"
@@ -66,6 +59,7 @@ const Login = ({ setLogin, setSignup }) => {
             <p className="validation-error-text">{formik.errors.username}</p>
           )}
 
+          {/* Password Input */}
           <div className="password-wrapper">
             <input
               type={showPassword ? "text" : "password"}
@@ -80,22 +74,23 @@ const Login = ({ setLogin, setSignup }) => {
               className="password-toggle"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+              {showPassword ? (
+                <VisibilityOffOutlinedIcon />
+              ) : (
+                <VisibilityOutlinedIcon />
+              )}
             </span>
           </div>
           {formik.touched.password && formik.errors.password && (
             <p className="validation-error-text">{formik.errors.password}</p>
           )}
 
+          {/* Buttons */}
           <div className="login-signup-cancel-btns">
-            <button
-              type="submit"
-              className="login-btn"
-              disabled={formik.isSubmitting}
-            >
-              {formik.isSubmitting ? (
+            <button type="submit" className="login-btn" disabled={isLoading}>
+              {isLoading ? (
                 <>
-                  Login <AutorenewIcon className="rotate" />
+                  Logging in <AutorenewIcon className="rotate" />
                 </>
               ) : (
                 "Login"

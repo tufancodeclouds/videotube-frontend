@@ -1,27 +1,20 @@
-import React, { useEffect, useState } from "react";
-import api from "../../api/axiosInstance";
+import React from "react";
+import useFetchData from "../../hooks/useFetchData";
 
 const Dashboard = () => {
-  // const [data, setData] = useState(null);
-  // const [error, setError] = useState(null);
-
-  // useEffect(() => {
-  //   const fetchDashboard = async () => {
-  //     try {
-  //       const response = await api.get("/users/dashboard"); // Interceptor will add Bearer Token
-  //       setData(response.data);
-  //     } catch (err) {
-  //       console.error("Dashboard fetch failed:", err.response?.data || err.message);
-  //       setError(err.response?.data || "Failed to fetch");
-  //     }
-  //   };
-
-  //   fetchDashboard();
-  // }, []);
+  const { data, error, isLoading } = useFetchData("/users/dashboard");
 
   return (
     <div>
       <h1>Dashboard</h1>
+      {isLoading && <p>Loading...</p>}
+      {error && <p className="error-text">{error}</p>}
+      {data && (
+        <div>
+          <h2>Welcome, {data.user?.fullname}!</h2>
+          <p>Email: {data.user?.email}</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -7,11 +7,12 @@ import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { signupValidationSchema } from "../../validations/signupValidationSchema";
-import authApi from "../../api/authApi";
+import useApiCall from "../../hooks/useApiCall";
 import "./Signup.css";
 
 const Signup = ({ setSignup, setLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const { apiCall, isLoading } = useApiCall();
 
   const formik = useFormik({
     initialValues: {
@@ -23,33 +24,19 @@ const Signup = ({ setSignup, setLogin }) => {
       coverImage: null,
     },
     validationSchema: signupValidationSchema,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       const formData = new FormData();
-      formData.append("fullname", values.fullname);
-      formData.append("email", values.email);
-      formData.append("username", values.username);
-      formData.append("password", values.password);
-      formData.append("avatar", values.avatar);
-      formData.append("coverImage", values.coverImage ? values.coverImage : null);
+      Object.keys(values).forEach((key) => {
+        if (values[key]) formData.append(key, values[key]);
+      });
 
       try {
-        const response = await authApi.post("/users/register", formData);
-
-        console.log(response);
-
-        toast.success(response.data.message);
+        const response = await apiCall("/users/register", "POST", formData);
+        // toast.success(response.message);
 
         resetForm();
-
         setSignup(false);
-
-      } catch (error) {
-        toast.error(
-          error.response?.data?.message || "Signup failed. Please try again."
-        );
-      } finally {
-        setSubmitting(false);
-      }
+      } catch (error) {}
     },
   });
 
@@ -62,114 +49,102 @@ const Signup = ({ setSignup, setLogin }) => {
         </div>
 
         <form className="signup-form" onSubmit={formik.handleSubmit}>
+          {/* Fullname Input */}
           <input
             type="text"
             placeholder="Fullname"
             className="signup-form-input"
             name="fullname"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.fullname}
+            {...formik.getFieldProps("fullname")}
           />
           {formik.touched.fullname && formik.errors.fullname && (
             <p className="validation-error-text">{formik.errors.fullname}</p>
           )}
 
+          {/* Email Input */}
           <input
             type="email"
             placeholder="Email"
             className="signup-form-input"
             name="email"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.email}
+            {...formik.getFieldProps("email")}
           />
           {formik.touched.email && formik.errors.email && (
             <p className="validation-error-text">{formik.errors.email}</p>
           )}
 
+          {/* Username Input */}
           <input
             type="text"
             placeholder="Username"
             className="signup-form-input"
             name="username"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.username}
+            {...formik.getFieldProps("username")}
           />
           {formik.touched.username && formik.errors.username && (
             <p className="validation-error-text">{formik.errors.username}</p>
           )}
 
+          {/* Password Input */}
           <div className="password-wrapper">
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               className="signup-form-input"
               name="password"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.password}
+              {...formik.getFieldProps("password")}
             />
             <span
               className="password-toggle"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+              {showPassword ? (
+                <VisibilityOffOutlinedIcon />
+              ) : (
+                <VisibilityOutlinedIcon />
+              )}
             </span>
           </div>
           {formik.touched.password && formik.errors.password && (
             <p className="validation-error-text">{formik.errors.password}</p>
           )}
-          
+
+          {/* Avatar Upload */}
           <div className="upload-sec">
             <div className="upload-sec-show">
               <p className="upload-sec-show-text">Avatar</p>
               <div className="upload-sec-show-icon-wrapper">
-                <FileUploadOutlinedIcon
-                  sx={{ fontSize: "28px" }}
-                  className="upload-sec-show-icon"
-                />
+                <FileUploadOutlinedIcon sx={{ fontSize: "28px" }} />
                 <input
                   type="file"
                   accept="image/jpeg, image/png"
                   className="upload-form-file"
-                  onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    formik.setFieldValue("avatar", file);
-                  }}
+                  onChange={(e) =>
+                    formik.setFieldValue("avatar", e.target.files?.[0])
+                  }
                 />
               </div>
             </div>
-            {formik.touched.avatar && formik.errors.avatar ? (
-              <p className="validation-error-text validation-error-upload">
-                {formik.errors.avatar}
+            {formik.values.avatar && (
+              <p className="validation-success-text">
+                Selected file: <span>{formik.values.avatar.name}</span>
               </p>
-            ) : (
-              formik.values.avatar && (
-                <p className="validation-success-text">
-                  Selected file: <span>{formik.values.avatar.name}</span>
-                </p>
-              )
             )}
           </div>
 
+          {/* Cover Image Upload */}
           <div className="upload-sec">
             <div className="upload-sec-show">
               <p className="upload-sec-show-text">Cover Image</p>
               <div className="upload-sec-show-icon-wrapper">
-                <FileUploadOutlinedIcon
-                  sx={{ fontSize: "28px" }}
-                  className="upload-sec-show-icon"
-                />
+                <FileUploadOutlinedIcon sx={{ fontSize: "28px" }} />
                 <input
                   type="file"
                   accept="image/jpeg, image/png"
                   className="upload-form-file"
-                  onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    formik.setFieldValue("coverImage", file);
-                  }}
+                  onChange={(e) =>
+                    formik.setFieldValue("coverImage", e.target.files?.[0])
+                  }
                 />
               </div>
             </div>
@@ -180,15 +155,12 @@ const Signup = ({ setSignup, setLogin }) => {
             )}
           </div>
 
+          {/* Buttons */}
           <div className="login-signup-cancel-btns">
-            <button
-              type="submit"
-              className="signup-btn"
-              disabled={formik.isSubmitting}
-            >
-              {formik.isSubmitting ? (
+            <button type="submit" className="signup-btn" disabled={isLoading}>
+              {isLoading ? (
                 <>
-                  Signup <AutorenewRoundedIcon className="rotate" />
+                  Signing up <AutorenewRoundedIcon className="rotate" />
                 </>
               ) : (
                 "Signup"
